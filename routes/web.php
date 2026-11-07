@@ -21,7 +21,12 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // {link} → Route Model Binding (Link::resolveRouteBinding + firstOrFail)
+    // links.edit = GET /links/{link}/edit | links.update = PUT /links/{link}
     Route::resource('links', LinkController::class)->except(['show']);
+
+    Route::patch('links/{link}/move-up', [LinkController::class, 'moveUp'])->name('links.move-up');
+    Route::patch('links/{link}/move-down', [LinkController::class, 'moveDown'])->name('links.move-down');
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

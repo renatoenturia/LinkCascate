@@ -5,6 +5,7 @@ namespace App\Models;
 use Database\Factories\LinkFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -37,5 +38,29 @@ class Link extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Route Model Binding: {link} nas rotas resolve para um registro deste model.
+     *
+     * Equivale a auth()->user()->links()->whereKey($value)->firstOrFail() — 404 se o id
+     * não existir ou não pertencer ao usuário logado.
+     *
+     * @param  mixed  $value
+     * @param  string|null  $field
+     *
+     * @throws ModelNotFoundException
+     */
+    public function resolveRouteBinding($value, $field = null): Model
+    {
+        $user = auth()->user();
+
+        if ($user === null) {
+            throw (new ModelNotFoundException)->setModel(static::class, [$value]);
+        }
+
+        return $user->links()
+            ->where($field ?? $this->getRouteKeyName(), $value)
+            ->firstOrFail();
     }
 }

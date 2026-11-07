@@ -14,7 +14,9 @@
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-2xl font-semibold text-gray-900">Meus links</h1>
-                    <p class="mt-1 text-sm text-gray-600">Organize os links em cascata da sua bio.</p>
+                    <p class="mt-1 text-sm text-gray-600">
+                        {{ $activeLinks }} ativo(s) de {{ $totalLinks }} no total — ordem da cascata (posição).
+                    </p>
                 </div>
                 <a
                     href="{{ route('links.create') }}"
@@ -30,53 +32,54 @@
                 </p>
             @endif
 
-            @if ($links->isEmpty())
-                <p class="mt-8 text-center text-sm text-gray-500">
-                    Nenhum link ainda.
-                    <a href="{{ route('links.create') }}" class="text-blue-600 hover:underline">Criar o primeiro</a>
-                </p>
-            @else
-                <ul class="mt-6 divide-y divide-gray-200 border border-gray-200 rounded-md">
-                    @foreach ($links as $link)
-                        <li class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div class="min-w-0 flex-1">
-                                <p class="flex flex-wrap items-center gap-2 font-medium text-gray-900">
-                                    <span>{{ $link->title }}</span>
-                                    @unless ($link->is_active)
-                                        <span class="rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-600">Inativo</span>
-                                    @endunless
-                                </p>
-                                <p class="truncate text-sm text-gray-500">{{ $link->url }}</p>
-                                <p class="text-xs text-gray-400">Posição {{ $link->position }}</p>
-                            </div>
-                            <div class="flex shrink-0 gap-2">
-                                <a
-                                    href="{{ route('links.edit', $link) }}"
-                                    class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                                >
-                                    Editar
-                                </a>
-                                <form method="POST" action="{{ route('links.destroy', $link) }}" onsubmit="return confirm('Remover este link?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button
-                                        type="submit"
-                                        class="rounded-md border border-red-200 px-3 py-1.5 text-sm text-red-700 hover:bg-red-50"
-                                    >
-                                        Excluir
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
+            <ul class="mt-6 divide-y divide-gray-200 overflow-hidden rounded-md border border-gray-200" role="list">
+                @forelse ($links as $link)
+                    <li class="flex flex-col gap-3 bg-white p-4 transition hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0 flex-1">
+                            <p class="flex flex-wrap items-center gap-2 font-medium text-gray-900">
+                                <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-xs text-gray-600" title="Posição na cascata">
+                                    {{ $link->position }}
+                                </span>
+                                <span>{{ $link->title }}</span>
+                                @unless ($link->is_active)
+                                    <span class="rounded bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800">Inativo</span>
+                                @endunless
+                            </p>
+                            <a
+                                href="{{ $link->url }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="mt-1 block truncate text-sm text-blue-600 hover:underline"
+                            >
+                                {{ $link->url }}
+                            </a>
+                        </div>
+                        <div class="flex shrink-0 items-start gap-2">
+                            @include('links._reorder-buttons', ['link' => $link])
+                            <a
+                                href="{{ route('links.edit', $link) }}"
+                                class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+                            >
+                                Editar
+                            </a>
+                                @include('links._destroy-form', ['link' => $link])
+                        </div>
+                    </li>
+                @empty
+                    <li class="p-8 text-center text-sm text-gray-500">
+                        Nenhum link ainda.
+                        <a href="{{ route('links.create') }}" class="text-blue-600 hover:underline">Criar o primeiro</a>
+                    </li>
+                @endforelse
+            </ul>
 
-            <div class="mt-8 flex flex-wrap gap-3 border-t border-gray-200 pt-6">
-                <a href="{{ route('dashboard') }}" class="text-sm text-blue-600 hover:underline">Dashboard</a>
+            <div class="mt-8 flex flex-wrap gap-3 border-t border-gray-200 pt-6 text-sm">
+                <a href="{{ route('dashboard') }}" class="text-blue-600 hover:underline">Dashboard</a>
+                <span class="text-gray-300" aria-hidden="true">|</span>
+                <a href="{{ route('links.index') }}" class="font-medium text-gray-900" aria-current="page">Listagem (links.index)</a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf
-                    <button type="submit" class="text-sm text-gray-600 hover:underline">Sair</button>
+                    <button type="submit" class="text-gray-600 hover:underline">Sair</button>
                 </form>
             </div>
         </div>

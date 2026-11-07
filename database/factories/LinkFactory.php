@@ -20,10 +20,17 @@ class LinkFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'title' => fake()->words(3, true),
+            'title' => fake()->randomElement(['Blog', 'Loja', 'Contato', 'Newsletter']).' — '.fake()->words(2, true),
             'url' => fake()->url(),
             'position' => fake()->numberBetween(1, 20),
             'is_active' => true,
         ];
+    }
+
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
     }
 }
