@@ -12,13 +12,7 @@
     <div class="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
         <h1 class="mb-6 text-center text-2xl font-semibold text-gray-900">Entrar</h1>
 
-        @if ($errors->any())
-            <div class="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
-                {{ $errors->first() }}
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}" class="space-y-4">
+        <form method="POST" action="{{ route('login') }}" class="space-y-4" novalidate>
             @csrf
 
             <div>
@@ -28,11 +22,18 @@
                     type="email"
                     name="email"
                     value="{{ old('email') }}"
-                    required
                     autofocus
                     autocomplete="email"
-                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}"
+                    @class([
+                        'w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-1',
+                        'border-red-500 focus:border-red-500 focus:ring-red-500' => $errors->has('email'),
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => ! $errors->has('email'),
+                    ])
                 >
+                @error('email')
+                    <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                @enderror
             </div>
 
             <div>
@@ -41,10 +42,17 @@
                     id="password"
                     type="password"
                     name="password"
-                    required
                     autocomplete="current-password"
-                    class="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}"
+                    @class([
+                        'w-full rounded-md border px-3 py-2 focus:outline-none focus:ring-1',
+                        'border-red-500 focus:border-red-500 focus:ring-red-500' => $errors->has('password'),
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => ! $errors->has('password'),
+                    ])
                 >
+                @error('password')
+                    <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="flex items-center gap-2">
@@ -66,6 +74,10 @@
         </form>
 
         <p class="mt-6 text-center text-sm text-gray-600">
+            Ainda não tem conta?
+            <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Cadastre-se</a>
+        </p>
+        <p class="mt-2 text-center text-sm text-gray-600">
             <a href="{{ url('/') }}" class="text-blue-600 hover:underline">Voltar ao início</a>
         </p>
     </div>

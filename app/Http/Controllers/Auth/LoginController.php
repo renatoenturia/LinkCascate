@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+/**
+ * Entrada HTTP do login. Validação e autenticação estão em {@see LoginRequest}.
+ */
 class LoginController extends Controller
 {
     public function showLoginForm(): View
@@ -15,21 +17,15 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request): RedirectResponse
+    /**
+     * O type-hint LoginRequest dispara a validação antes deste corpo executar.
+     */
+    public function login(LoginRequest $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $request->authenticate();
 
-        if (Auth::attempt($credentials, $request->boolean('remember'))) {
-            $request->session()->regenerate();
+        $request->session()->regenerate();
 
-            return redirect()->intended('/');
-        }
-
-        return back()->withErrors([
-            'email' => __('auth.failed'),
-        ])->onlyInput('email');
+        return redirect()->intended('/');
     }
 }
