@@ -69,15 +69,13 @@ class RegisterRequest extends FormRequest
     }
 
     /**
-     * Cria o usuário com dados já validados.
+     * Cria o usuário apenas com atributos validados (sem confirmações nem campos extras).
      */
     public function tryToRegister(): User
     {
-        return User::query()->create([
-            'name' => $this->string('name')->toString(),
-            'email' => $this->string('email')->toString(),
-            'password' => $this->string('password')->toString(),
-        ]);
+        return User::query()->create(
+            $this->safe()->only(['name', 'email', 'password'])
+        );
     }
 
     protected function passwordRules(): Password
