@@ -16,7 +16,7 @@ class ProfileTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('profile.store'), [
             'name' => 'Renato',
-            'handler' => 'renato',
+            'handler' => '@renato',
             'bio' => 'Desenvolvedor Laravel.',
         ]);
 

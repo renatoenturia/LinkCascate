@@ -57,26 +57,33 @@
 
             <div>
                 <label for="handler" class="mb-1 block text-sm font-medium text-gray-700">Handler</label>
-                <div class="flex rounded-md shadow-sm">
-                    <span class="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-sm text-gray-500">/p/</span>
-                    <input
-                        id="handler"
-                        type="text"
-                        name="handler"
-                        value="{{ old('handler', $user->handler) }}"
-                        required
-                        pattern="[a-zA-Z0-9_-]+"
-                        autocomplete="username"
-                        @class([
-                            'w-full rounded-r-md border px-3 py-2 focus:outline-none focus:ring-1',
-                            'border-red-500 focus:border-red-500 focus:ring-red-500' => $errors->has('handler'),
-                            'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => ! $errors->has('handler'),
-                        ])
-                    >
-                </div>
+                <p class="mb-2 text-xs text-gray-500">Começa com @, sem espaços — letras, números, _ e -</p>
+                <input
+                    id="handler"
+                    type="text"
+                    name="handler"
+                    value="{{ old('handler', $user->handler ? '@'.$user->handler : '') }}"
+                    required
+                    placeholder="@seu_nome"
+                    autocomplete="username"
+                    spellcheck="false"
+                    @class([
+                        'w-full rounded-md border px-3 py-2 font-mono text-sm focus:outline-none focus:ring-1',
+                        'border-red-500 focus:border-red-500 focus:ring-red-500' => $errors->has('handler') || $errors->has('handler_slug'),
+                        'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => ! $errors->has('handler') && ! $errors->has('handler_slug'),
+                    ])
+                >
                 @error('handler')
                     <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
                 @enderror
+                @error('handler_slug')
+                    <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                @enderror
+                @if ($user->handler)
+                    <p class="mt-2 text-xs text-gray-500">
+                        URL: <span class="font-mono">{{ url('/p/'.$user->handler) }}</span>
+                    </p>
+                @endif
             </div>
 
             <div>
