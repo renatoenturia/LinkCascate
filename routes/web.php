@@ -28,7 +28,12 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $user = auth()->user();
+
+        return view('dashboard', [
+            'linksCount' => $user->links()->count(),
+            'activeLinksCount' => $user->links()->where('is_active', true)->count(),
+        ]);
     })->name('dashboard');
 
     // {link} → Route Model Binding (Link::resolveRouteBinding + firstOrFail)

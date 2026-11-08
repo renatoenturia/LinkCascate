@@ -13,7 +13,7 @@
                     </p>
                 </div>
                 @can('create', \App\Models\Link::class)
-                    <x-button :href="route('links.create')">Novo link</x-button>
+                    <x-button :href="route('links.create')" icon="plus">Novo link</x-button>
                 @endcan
             </div>
         </x-slot>
@@ -37,13 +37,29 @@
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 @can('reorder', $link)
-                                    @include('links._reorder-buttons', ['link' => $link])
+                                    <x-link.reorder-buttons
+                                        :link="$link"
+                                        :first="$loop->first"
+                                        :last="$loop->last"
+                                    />
                                 @endcan
                                 @can('update', $link)
-                                    <x-button :href="route('links.edit', $link)" variant="primary" :outline="true" size="sm">Editar</x-button>
+                                    <x-button
+                                        :href="route('links.edit', $link)"
+                                        variant="primary"
+                                        :outline="true"
+                                        size="sm"
+                                        icon="pencil"
+                                    >
+                                        Editar
+                                    </x-button>
                                 @endcan
                                 @can('delete', $link)
-                                    @include('links._destroy-form', ['link' => $link])
+                                    <x-button.delete
+                                        :action="route('links.destroy', $link)"
+                                        :confirm="'Remover o link «'.$link->title.'»? Esta ação não pode ser desfeita.'"
+                                        label="Excluir {{ $link->title }}"
+                                    />
                                 @endcan
                             </div>
                         </div>
