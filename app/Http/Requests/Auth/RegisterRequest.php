@@ -51,6 +51,10 @@ class RegisterRequest extends FormRequest
             'email.max' => 'O e-mail não pode ter mais de :max caracteres.',
             'password.required' => 'Informe uma senha.',
             'password.confirmed' => 'A confirmação da senha não confere.',
+            'password.min' => 'A senha deve ter pelo menos :min caracteres.',
+            'password.letters' => 'A senha deve conter pelo menos uma letra.',
+            'password.mixed' => 'A senha deve conter letras maiúsculas e minúsculas.',
+            'password.numbers' => 'A senha deve conter pelo menos um número.',
         ];
     }
 
@@ -83,12 +87,6 @@ class RegisterRequest extends FormRequest
         return Password::min(8)
             ->letters()
             ->mixedCase()
-            ->numbers()
-            ->messages([
-                'min' => 'A senha deve ter pelo menos :min caracteres.',
-                'letters' => 'A senha deve conter pelo menos uma letra.',
-                'mixed' => 'A senha deve conter letras maiúsculas e minúsculas.',
-                'numbers' => 'A senha deve conter pelo menos um número.',
-            ]);
+            ->numbers();
     }
 }
