@@ -5,13 +5,17 @@ namespace App\Http\Requests;
 use App\Models\User;
 use App\Rules\HandlerFormat;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 /**
  * @property-read string $name
- * @property-read string $handler      Valor com @ (ex.: @renato)
- * @property-read string $handler_slug Slug sem @ (normalizado em prepareForValidation)
+ * @property-read string $handler
+ * @property-read string $handler_slug
  * @property-read string|null $bio
+ * @property-read UploadedFile|null $avatar
  */
 class StoreProfileRequest extends FormRequest
 {
@@ -54,6 +58,11 @@ class StoreProfileRequest extends FormRequest
                 Rule::unique('users', 'handler')->ignore($this->user()),
             ],
             'bio' => ['nullable', 'string', 'max:500'],
+            'avatar' => [
+                'nullable',
+                File::types(['jpg', 'jpeg', 'png', 'webp'])
+                    ->max(2048),
+            ],
         ];
     }
 
@@ -67,6 +76,9 @@ class StoreProfileRequest extends FormRequest
             'handler.required' => 'Escolha um handler para sua página pública.',
             'handler_slug.unique' => 'Este handler já está em uso.',
             'bio.max' => 'O resumo não pode ter mais de :max caracteres.',
+            'avatar.image' => 'O arquivo deve ser uma imagem.',
+            'avatar.mimes' => 'Use JPG, PNG ou WebP.',
+            'avatar.max' => 'A imagem não pode ter mais de 2 MB.',
         ];
     }
 
@@ -79,16 +91,27 @@ class StoreProfileRequest extends FormRequest
             'name' => 'nome',
             'handler' => 'handler',
             'bio' => 'biografia',
+            'avatar' => 'foto de perfil',
         ];
     }
 
     public function updateProfile(User $user): User
     {
-        $user->update([
+        $attributes = [
             'name' => $this->validated('name'),
             'handler' => $this->validated('handler_slug'),
             'bio' => $this->validated('bio'),
-        ]);
+        ];
+
+        if ($this->hasFile('avatar')) {
+            if ($user->avatar_path !== null) {
+                Storage::disk('public')->delete($user->avatar_path);
+            }
+
+            $attributes['avatar_path'] = $this->file('avatar')->store('avatars', 'public');
+        }
+
+        $user->update($attributes);
 
         return $user->refresh();
     }

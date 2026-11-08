@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BiolinkController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -10,9 +11,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/p/{handler}', [ProfileController::class, 'show'])
-    ->where('handler', '[a-zA-Z0-9_-]+')
-    ->name('profile.show');
+/*
+| Biolink público — {user:handler} resolve User pela coluna handler (custom binding).
+| Forma curta na URL: /p/testuser
+*/
+Route::get('/p/{user:handler}', [BiolinkController::class, 'show'])
+    ->where('user', '[a-zA-Z0-9_-]+')
+    ->name('biolink.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');

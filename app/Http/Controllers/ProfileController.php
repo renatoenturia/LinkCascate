@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProfileRequest;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -29,23 +28,5 @@ class ProfileController extends Controller
         return redirect()
             ->route('profile.index')
             ->with('status', 'Perfil atualizado com sucesso.');
-    }
-
-    /**
-     * GET /p/{handler} — página pública da bio (convidados).
-     */
-    public function show(string $handler): View
-    {
-        $user = User::query()
-            ->where('handler', $handler)
-            ->firstOrFail();
-
-        $links = $user->links()
-            ->where('is_active', true)
-            ->orderBy('position')
-            ->orderBy('id')
-            ->get();
-
-        return view('profile.show', compact('user', 'links'));
     }
 }

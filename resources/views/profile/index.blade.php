@@ -26,14 +26,46 @@
         @if ($user->handler)
             <p class="mt-4 text-sm text-gray-600">
                 Prévia:
-                <a href="{{ route('profile.show', $user->handler) }}" class="font-medium text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
-                    {{ url('/p/'.$user->handler) }}
+                <a href="{{ route('biolink.show', $user) }}" class="font-medium text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">
+                    {{ route('biolink.show', $user) }}
                 </a>
             </p>
         @endif
 
-        <form method="POST" action="{{ route('profile.store') }}" class="mt-6 space-y-5" novalidate>
+        <form method="POST" action="{{ route('profile.store') }}" class="mt-6 space-y-5" enctype="multipart/form-data" novalidate>
             @csrf
+
+            <div>
+                <span class="mb-1 block text-sm font-medium text-gray-700">Foto de perfil</span>
+                <div class="flex items-center gap-4">
+                    @if ($user->avatarUrl())
+                        <img
+                            src="{{ $user->avatarUrl() }}"
+                            alt="Foto atual de {{ $user->name }}"
+                            class="h-20 w-20 rounded-full border border-gray-200 object-cover"
+                        >
+                    @else
+                        <div class="flex h-20 w-20 items-center justify-center rounded-full border border-dashed border-gray-300 bg-gray-50 text-xs text-gray-400">
+                            Sem foto
+                        </div>
+                    @endif
+                    <div class="min-w-0 flex-1">
+                        <input
+                            id="avatar"
+                            type="file"
+                            name="avatar"
+                            accept="image/jpeg,image/png,image/webp"
+                            @class([
+                                'block w-full text-sm text-gray-600 file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-gray-800 hover:file:bg-gray-200',
+                            ])
+                        >
+                        <p class="mt-1 text-xs text-gray-500">JPG, PNG ou WebP — até 2 MB.</p>
+                    </div>
+                </div>
+                @error('avatar')
+                    <p class="mt-1 text-sm text-red-600" role="alert">{{ $message }}</p>
+                @enderror
+            </div>
 
             <div>
                 <label for="name" class="mb-1 block text-sm font-medium text-gray-700">Nome</label>

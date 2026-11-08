@@ -10,7 +10,14 @@
 </head>
 <body class="min-h-screen bg-gray-100 px-4 py-10">
     <div class="mx-auto max-w-md text-center">
-        <h1 class="text-2xl font-semibold text-gray-900">{{ $user->name }}</h1>
+        @if ($user->avatarUrl())
+            <img
+                src="{{ $user->avatarUrl() }}"
+                alt="Foto de {{ $user->name }}"
+                class="mx-auto h-24 w-24 rounded-full border border-gray-200 object-cover shadow-sm"
+            >
+        @endif
+        <h1 class="mt-4 text-2xl font-semibold text-gray-900">{{ $user->name }}</h1>
         @if ($user->bio)
             <p class="mt-3 text-sm leading-relaxed text-gray-600">{{ $user->bio }}</p>
         @endif

@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
@@ -29,6 +31,32 @@ class ProfileTest extends TestCase
         $this->assertSame('Desenvolvedor Laravel.', $user->bio);
     }
 
+    public function test_user_can_upload_avatar_on_profile_store(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create([
+            'handler' => 'foto-user',
+            'bio' => null,
+        ]);
+
+        $file = UploadedFile::fake()->image('avatar.jpg', 200, 200);
+
+        $response = $this->actingAs($user)->post(route('profile.store'), [
+            'name' => $user->name,
+            'handler' => '@foto-user',
+            'bio' => 'Com foto.',
+            'avatar' => $file,
+        ]);
+
+        $response->assertRedirect(route('profile.index'));
+
+        $user->refresh();
+        $this->assertNotNull($user->avatar_path);
+        Storage::disk('public')->assertExists($user->avatar_path);
+        $this->assertStringStartsWith('avatars/', $user->avatar_path);
+    }
+
     public function test_public_profile_shows_active_links_in_order(): void
     {
         $user = User::factory()->create([
@@ -42,7 +70,7 @@ class ProfileTest extends TestCase
             ['title' => 'Oculto', 'url' => 'https://example.com/x', 'position' => 3, 'is_active' => false],
         ]);
 
-        $response = $this->get(route('profile.show', 'bio-demo'));
+        $response = $this->get(route('biolink.show', 'bio-demo'));
 
         $response->assertOk();
         $response->assertSeeInOrder(['Primeiro', 'Segundo']);
