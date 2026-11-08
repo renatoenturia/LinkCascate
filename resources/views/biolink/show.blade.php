@@ -8,7 +8,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
-<body class="min-h-screen bg-gray-100 px-4 py-10">
+<body class="min-h-screen bg-base-200 px-4 py-10" data-theme="corporate">
     <div class="mx-auto max-w-md text-center">
         @if ($user->avatarUrl())
             <img
@@ -30,7 +30,7 @@
                         href="{{ $link->url }}"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-900 shadow-sm transition hover:border-gray-300 hover:shadow"
+                        class="btn btn-neutral btn-block"
                     >
                         {{ $link->title }}
                     </a>

@@ -1,33 +1,21 @@
-<div class="flex flex-col gap-1" role="group" aria-label="Reordenar link">
+<div class="join join-vertical" role="group" aria-label="Reordenar link">
     @if (! $loop->first)
         <form method="POST" action="{{ route('links.move-up', $link) }}">
             @csrf
             @method('PATCH')
-            <button
-                type="submit"
-                title="Subir na cascata"
-                class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
-            >
-                ↑ Subir
-            </button>
+            <button type="submit" title="Subir na cascata" class="btn btn-outline btn-xs join-item">↑</button>
         </form>
     @else
-        <span class="rounded-md border border-transparent px-2 py-1 text-xs text-gray-300" aria-hidden="true">↑ Subir</span>
+        <button type="button" disabled class="btn btn-disabled btn-xs join-item" aria-hidden="true">↑</button>
     @endif
 
     @if (! $loop->last)
         <form method="POST" action="{{ route('links.move-down', $link) }}">
             @csrf
             @method('PATCH')
-            <button
-                type="submit"
-                title="Descer na cascata"
-                class="rounded-md border border-gray-300 px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
-            >
-                ↓ Descer
-            </button>
+            <button type="submit" title="Descer na cascata" class="btn btn-outline btn-xs join-item">↓</button>
         </form>
     @else
-        <span class="rounded-md border border-transparent px-2 py-1 text-xs text-gray-300" aria-hidden="true">↓ Descer</span>
+        <button type="button" disabled class="btn btn-disabled btn-xs join-item" aria-hidden="true">↓</button>
     @endif
 </div>
