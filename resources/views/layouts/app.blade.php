@@ -21,7 +21,7 @@
                 <li>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="btn btn-outline btn-sm">Sair</button>
+                        <x-button type="submit" :outline="true" size="sm">Sair</x-button>
                     </form>
                 </li>
             </ul>
@@ -30,9 +30,9 @@
 
     <main class="container mx-auto max-w-4xl p-4 md:p-6">
         @if (session('status'))
-            <div role="alert" class="alert alert-success mb-4">
+            <x-alert variant="success" class="mb-4">
                 <span>{{ session('status') }}</span>
-            </div>
+            </x-alert>
         @endif
         @yield('content')
     </main>

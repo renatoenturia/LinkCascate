@@ -3,14 +3,14 @@
 @section('title', 'Novo link — '.config('app.name'))
 
 @section('content')
-    <x-ui.page-card title="Novo link" description="Adicione um item à sua cascata de bio links.">
-        <form method="POST" action="{{ route('links.store') }}" class="mt-4 space-y-4" novalidate>
-            @csrf
+    <x-card title="Novo link" description="Adicione um item à sua cascata de bio links." body-class="max-w-lg">
+        <x-form :action="route('links.store')" class="mt-4">
             @include('links._form')
 
-            <x-form.actions submit-label="Salvar">
-                <a href="{{ route('links.index') }}" class="btn btn-ghost">Cancelar</a>
-            </x-form.actions>
-        </form>
-    </x-ui.page-card>
+            <x-slot name="actions">
+                <x-button type="submit">Salvar</x-button>
+                <x-button :href="route('links.index')" variant="ghost">Cancelar</x-button>
+            </x-slot>
+        </x-form>
+    </x-card>
 @endsection

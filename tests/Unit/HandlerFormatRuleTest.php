@@ -16,13 +16,13 @@ class HandlerFormatRuleTest extends TestCase
     public function test_rejects_missing_at_prefix(): void
     {
         $errors = $this->validateWithErrors('renato');
-        $this->assertContains('O handler deve começar com @.', $errors);
+        $this->assertContains('O identificador deve começar com @.', $errors);
     }
 
     public function test_rejects_spaces(): void
     {
         $errors = $this->validateWithErrors('@meu nome');
-        $this->assertContains('O handler não pode conter espaços.', $errors);
+        $this->assertContains('O identificador não pode conter espaços.', $errors);
     }
 
     public function test_rejects_invalid_characters_after_at(): void

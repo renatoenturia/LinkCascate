@@ -3,8 +3,8 @@
 @section('title', 'Meus links — '.config('app.name'))
 
 @section('content')
-    <div class="card bg-base-100 shadow-xl">
-        <div class="card-body">
+    <x-card>
+        <x-slot name="heading">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="card-title text-2xl">Meus links</h1>
@@ -13,14 +13,16 @@
                     </p>
                 </div>
                 @can('create', \App\Models\Link::class)
-                    <a href="{{ route('links.create') }}" class="btn btn-primary">Novo link</a>
+                    <x-button :href="route('links.create')">Novo link</x-button>
                 @endcan
             </div>
+        </x-slot>
 
-            <ul class="mt-4 space-y-2">
-                @forelse ($links as $link)
-                    <li class="card card-border bg-base-100">
-                        <div class="card-body flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <ul class="mt-4 space-y-2">
+            @forelse ($links as $link)
+                <li>
+                    <x-card bordered class="shadow-none">
+                        <div class="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
                             <div class="min-w-0 flex-1">
                                 <div class="flex flex-wrap items-center gap-2">
                                     <span class="badge badge-neutral badge-sm">{{ $link->position }}</span>
@@ -38,23 +40,25 @@
                                     @include('links._reorder-buttons', ['link' => $link])
                                 @endcan
                                 @can('update', $link)
-                                    <a href="{{ route('links.edit', $link) }}" class="btn btn-outline btn-sm">Editar</a>
+                                    <x-button :href="route('links.edit', $link)" variant="primary" :outline="true" size="sm">Editar</x-button>
                                 @endcan
                                 @can('delete', $link)
                                     @include('links._destroy-form', ['link' => $link])
                                 @endcan
                             </div>
                         </div>
-                    </li>
-                @empty
-                    <li class="alert">
+                    </x-card>
+                </li>
+            @empty
+                <li>
+                    <x-alert>
                         <span>
                             Nenhum link ainda.
                             <a href="{{ route('links.create') }}" class="link link-primary">Criar o primeiro</a>
                         </span>
-                    </li>
-                @endforelse
-            </ul>
-        </div>
-    </div>
+                    </x-alert>
+                </li>
+            @endforelse
+        </ul>
+    </x-card>
 @endsection

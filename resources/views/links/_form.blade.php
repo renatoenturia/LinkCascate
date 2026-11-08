@@ -3,12 +3,11 @@
 @endphp
 
 <div class="space-y-4">
-    <x-form.input label="Título" name="title" :value="$link?->title" required autofocus />
-
-    <x-form.input label="URL" name="url" type="url" :value="$link?->url" placeholder="https://" />
+    <x-input label="Título" name="title" :value="$link?->title" required autofocus />
+    <x-input label="URL" name="url" type="url" :value="$link?->url" placeholder="https://" />
 
     @isset($link)
-        <x-form.input label="Posição na cascata" name="position" type="number" :value="$link->position" min="0" />
+        <x-input label="Posição na cascata" name="position" type="number" :value="$link->position" min="0" />
     @endisset
 
     <x-form.checkbox

@@ -6,7 +6,13 @@
 >
     @csrf
     @method('DELETE')
-    <button type="submit" class="{{ $buttonClass ?? 'btn btn-error btn-outline btn-sm' }}">
+    <x-button
+        type="submit"
+        variant="error"
+        :outline="true"
+        :size="$buttonSize ?? 'sm'"
+        :class="$buttonClass ?? ''"
+    >
         {{ $buttonLabel ?? 'Excluir' }}
-    </button>
+    </x-button>
 </form>

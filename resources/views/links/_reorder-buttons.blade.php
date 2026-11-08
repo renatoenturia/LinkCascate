@@ -3,19 +3,19 @@
         <form method="POST" action="{{ route('links.move-up', $link) }}">
             @csrf
             @method('PATCH')
-            <button type="submit" title="Subir na cascata" class="btn btn-outline btn-xs join-item">↑</button>
+            <x-button type="submit" :outline="true" size="xs" class="join-item" title="Subir na cascata">↑</x-button>
         </form>
     @else
-        <button type="button" disabled class="btn btn-disabled btn-xs join-item" aria-hidden="true">↑</button>
+        <x-button type="button" variant="disabled" size="xs" class="join-item" disabled aria-hidden="true">↑</x-button>
     @endif
 
     @if (! $loop->last)
         <form method="POST" action="{{ route('links.move-down', $link) }}">
             @csrf
             @method('PATCH')
-            <button type="submit" title="Descer na cascata" class="btn btn-outline btn-xs join-item">↓</button>
+            <x-button type="submit" :outline="true" size="xs" class="join-item" title="Descer na cascata">↓</x-button>
         </form>
     @else
-        <button type="button" disabled class="btn btn-disabled btn-xs join-item" aria-hidden="true">↓</button>
+        <x-button type="button" variant="disabled" size="xs" class="join-item" disabled aria-hidden="true">↓</x-button>
     @endif
 </div>

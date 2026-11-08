@@ -15,10 +15,10 @@
         </div>
         <div class="flex-none gap-1">
             @if (Route::has('login'))
-                <a href="{{ route('login') }}" class="btn btn-ghost btn-sm">Entrar</a>
+                <x-button :href="route('login')" variant="ghost" size="sm">Entrar</x-button>
             @endif
             @if (Route::has('register'))
-                <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Cadastre-se</a>
+                <x-button :href="route('register')" size="sm">Cadastre-se</x-button>
             @endif
         </div>
     </header>

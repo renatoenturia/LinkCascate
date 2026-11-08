@@ -73,8 +73,8 @@ class StoreProfileRequest extends FormRequest
     {
         return [
             'name.required' => 'Informe seu nome de exibição.',
-            'handler.required' => 'Escolha um handler para sua página pública.',
-            'handler_slug.unique' => 'Este handler já está em uso.',
+            'handler.required' => 'Escolha um identificador para sua página pública.',
+            'handler_slug.unique' => 'Este identificador já está em uso.',
             'bio.max' => 'O resumo não pode ter mais de :max caracteres.',
             'avatar.image' => 'O arquivo deve ser uma imagem.',
             'avatar.mimes' => 'Use JPG, PNG ou WebP.',
@@ -89,7 +89,7 @@ class StoreProfileRequest extends FormRequest
     {
         return [
             'name' => 'nome',
-            'handler' => 'handler',
+            'handler' => 'identificador',
             'bio' => 'biografia',
             'avatar' => 'foto de perfil',
         ];

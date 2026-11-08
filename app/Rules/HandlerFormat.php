@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
 
 /**
- * Valida o handler no formato @usuario (sem espaços; slug com letras, números, _ e -).
+ * Valida o identificador público no formato @usuario (sem espaços; slug com letras, números, _ e -).
  */
 class HandlerFormat implements ValidationRule
 {
@@ -23,19 +23,19 @@ class HandlerFormat implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (! is_string($value)) {
-            $fail('O handler deve ser um texto.');
+            $fail('O identificador deve ser um texto.');
 
             return;
         }
 
         if (preg_match('/\s/u', $value) === 1) {
-            $fail('O handler não pode conter espaços.');
+            $fail('O identificador não pode conter espaços.');
 
             return;
         }
 
         if (! str_starts_with($value, '@')) {
-            $fail('O handler deve começar com @.');
+            $fail('O identificador deve começar com @.');
 
             return;
         }
@@ -49,13 +49,13 @@ class HandlerFormat implements ValidationRule
         }
 
         if (strlen($slug) < self::MIN_SLUG_LENGTH) {
-            $fail('O handler deve ter pelo menos '.self::MIN_SLUG_LENGTH.' caracteres após o @.');
+            $fail('O identificador deve ter pelo menos '.self::MIN_SLUG_LENGTH.' caracteres após o @.');
 
             return;
         }
 
         if (strlen($slug) > self::MAX_SLUG_LENGTH) {
-            $fail('O handler não pode ter mais de '.self::MAX_SLUG_LENGTH.' caracteres após o @.');
+            $fail('O identificador não pode ter mais de '.self::MAX_SLUG_LENGTH.' caracteres após o @.');
 
             return;
         }

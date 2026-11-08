@@ -2,7 +2,9 @@
     'submitLabel' => 'Salvar',
 ])
 
-<div {{ $attributes->class(['flex flex-wrap gap-2 pt-2']) }}>
-    <button type="submit" class="btn btn-primary">{{ $submitLabel }}</button>
+<div {{ $attributes->class(['flex flex-wrap gap-2']) }}>
+    <x-button type="submit" :variant="$submitVariant ?? 'primary'">
+        {{ $submitLabel }}
+    </x-button>
     {{ $slot }}
 </div>
