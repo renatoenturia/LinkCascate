@@ -13,6 +13,9 @@ use Illuminate\Notifications\Notifiable;
 /**
  * Mass assignment é controlado na camada de validação (Form Requests), não via $fillable —
  * ver Model::unguard() no AppServiceProvider.
+ *
+ * @property string|null $handler Identificador público (/p/{handler})
+ * @property string|null $bio     Resumo exibido na bio
  */
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable

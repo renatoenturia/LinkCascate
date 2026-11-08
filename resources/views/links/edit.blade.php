@@ -31,17 +31,19 @@
             </div>
         </form>
 
-        <section class="mt-10 border-t border-red-100 pt-6" aria-labelledby="danger-zone-heading">
-            <h2 id="danger-zone-heading" class="text-sm font-semibold text-red-800">Zona de perigo</h2>
-            <p class="mt-1 text-sm text-gray-600">Remove este link permanentemente da sua cascata.</p>
-            <div class="mt-4">
-                @include('links._destroy-form', [
-                    'link' => $link,
-                    'buttonClass' => 'rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700',
-                    'buttonLabel' => 'Excluir link',
-                ])
-            </div>
-        </section>
+        @can('delete', $link)
+            <section class="mt-10 border-t border-red-100 pt-6" aria-labelledby="danger-zone-heading">
+                <h2 id="danger-zone-heading" class="text-sm font-semibold text-red-800">Zona de perigo</h2>
+                <p class="mt-1 text-sm text-gray-600">Remove este link permanentemente da sua cascata.</p>
+                <div class="mt-4">
+                    @include('links._destroy-form', [
+                        'link' => $link,
+                        'buttonClass' => 'rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700',
+                        'buttonLabel' => 'Excluir link',
+                    ])
+                </div>
+            </section>
+        @endcan
     </div>
 </body>
 </html>

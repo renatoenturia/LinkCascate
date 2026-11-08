@@ -17,8 +17,14 @@
 
         <div class="mt-8 flex flex-wrap gap-4">
             <a
-                href="{{ route('links.index') }}"
+                href="{{ route('profile.index') }}"
                 class="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+            >
+                Meu perfil
+            </a>
+            <a
+                href="{{ route('links.index') }}"
+                class="rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
                 Meus links
             </a>

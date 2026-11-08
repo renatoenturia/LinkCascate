@@ -18,8 +18,7 @@ class UpdateLinkRequest extends FormRequest
         $link = $this->route('link');
 
         return $link instanceof Link
-            && $this->user() !== null
-            && $this->user()->id === $link->user_id;
+            && $this->user()?->can('update', $link) === true;
     }
 
     /**

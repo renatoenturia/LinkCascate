@@ -11,7 +11,11 @@ use Illuminate\View\View;
 
 class LinkController extends Controller
 {
-    public function __construct(private LinkReorderer $reorderer) {}
+    public function __construct(private LinkReorderer $reorderer)
+    {
+        // Mapeia index→viewAny, create/store→create, edit/update→update, destroy→delete
+        $this->authorizeResource(Link::class, 'link');
+    }
 
     /**
      * GET /links — rota nomeada links.index (Route::resource).
@@ -68,11 +72,15 @@ class LinkController extends Controller
 
     public function moveUp(Link $link): RedirectResponse
     {
+        $this->authorize('reorder', $link);
+
         return $this->redirectAfterReorder($link, $this->reorderer->moveUp($link), 'subiu');
     }
 
     public function moveDown(Link $link): RedirectResponse
     {
+        $this->authorize('reorder', $link);
+
         return $this->redirectAfterReorder($link, $this->reorderer->moveDown($link), 'desceu');
     }
 

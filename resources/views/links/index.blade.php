@@ -18,12 +18,14 @@
                         {{ $activeLinks }} ativo(s) de {{ $totalLinks }} no total — ordem da cascata (posição).
                     </p>
                 </div>
-                <a
-                    href="{{ route('links.create') }}"
-                    class="inline-flex justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-                >
-                    Novo link
-                </a>
+                @can('create', \App\Models\Link::class)
+                    <a
+                        href="{{ route('links.create') }}"
+                        class="inline-flex justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                    >
+                        Novo link
+                    </a>
+                @endcan
             </div>
 
             @if (session('status'))
@@ -55,14 +57,20 @@
                             </a>
                         </div>
                         <div class="flex shrink-0 items-start gap-2">
-                            @include('links._reorder-buttons', ['link' => $link])
-                            <a
-                                href="{{ route('links.edit', $link) }}"
-                                class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                            >
-                                Editar
-                            </a>
+                            @can('reorder', $link)
+                                @include('links._reorder-buttons', ['link' => $link])
+                            @endcan
+                            @can('update', $link)
+                                <a
+                                    href="{{ route('links.edit', $link) }}"
+                                    class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+                                >
+                                    Editar
+                                </a>
+                            @endcan
+                            @can('delete', $link)
                                 @include('links._destroy-form', ['link' => $link])
+                            @endcan
                         </div>
                     </li>
                 @empty
